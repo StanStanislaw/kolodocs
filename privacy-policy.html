@@ -264,6 +264,8 @@ main{min-height:68vh}
   .document section{break-inside:avoid;border-color:#ddd}
   a{color:black;text-decoration:underline}
 }
+/* Build 40: this attribute is injected only by the native KOŁO browser at document start. */
+html[data-kolo-app-browser] .site-header,html[data-kolo-app-browser] .nav,html[data-kolo-app-browser] .menu-button,html[data-kolo-app-browser] .nav-links{display:none!important;visibility:hidden!important}
 </style>
 </head>
 <body>
@@ -287,7 +289,7 @@ main{min-height:68vh}
 <p class="kicker">Legal document</p>
 <h1>Privacy Policy</h1>
 <p class="lede">KOŁO uses one shared policy across supported platforms, with short platform-specific clauses where Apple and Google services differ. The current implementation work is iOS; Google Play clauses apply only if and when KOŁO is distributed there.</p>
-<div class="doc-meta"><span>Last Updated: 2 August 2026</span></div>
+<div class="doc-meta"><span>Last Updated: 6 August 2026</span></div>
 </header>
 <div class="doc-layout">
 <aside aria-label="On this page" class="toc">
@@ -316,7 +318,7 @@ main{min-height:68vh}
 <p>Ordinary gameplay progress is not uploaded to a KOŁO account because KOŁO has no game account or cross-platform cloud profile. Local storage technology may differ between iOS and Android, but the purpose is the same.</p>
 </section><section id="age"><h2>3. Age Information and Protected Mode</h2>
 <p>KOŁO uses a neutral age selector before play. No adult age is preselected. The exact age selected is used in memory only to determine an age band and is not retained. KOŁO stores only the resulting band — Under 13, 13–15, 16–17 or 18+ — together with the source of that band.</p>
-<p>Players aged four or younger cannot continue. Players under 18 enter a protected mode in which KOŁO does not initialise Google Mobile Ads, Google User Messaging Platform, Firebase Analytics or an advertising-tracking permission flow; does not request an advertising identifier; and does not show advertising or market Remove Ads.</p>
+<p>Players aged four or younger cannot continue. Players under 18 enter a protected mode in which KOŁO does not initialise Google Mobile Ads, Google User Messaging Platform, Firebase Analytics, Firebase Crashlytics or an advertising-tracking permission flow; does not request an advertising identifier; and does not show advertising or market Remove Ads.</p>
 <p>An 18+ age band establishes eligibility only. It is not consent. Adult advertising, Analytics and tracking-related features remain subject to the applicable privacy choices and platform permissions.</p>
 <p>On a platform that supplies a privacy-preserving declared-age-range service, KOŁO may use that result as an additional or preferred source. KOŁO does not request an exact date of birth, government identification, school information or payment information for age screening.</p>
 </section><section id="purchases"><h2>4. Purchases and Platform Store Information</h2>
@@ -341,23 +343,25 @@ main{min-height:68vh}
 <ul>
 <li><strong>Google Mobile Ads SDK (AdMob)</strong> to request and display advertising;</li>
 <li><strong>Google User Messaging Platform (UMP)</strong> to obtain and manage consent and privacy choices where required;</li>
-<li><strong>Google Analytics for Firebase</strong> for limited product analytics after an eligible adult’s applicable consent choices permit collection.</li>
+<li><strong>Google Analytics for Firebase</strong> for limited product analytics after an eligible adult’s applicable consent choices permit collection;</li>
+<li><strong>Firebase Crashlytics</strong> for crash and diagnostic information after the same eligible adult’s applicable consent choices permit collection.</li>
 </ul>
 <p>These services do not operate in a version where they are not included or enabled. The initial advertising design is adult-only AdMob interstitial advertising, without mediation, banners, rewarded ads or app-open ads. Interstitials are limited to natural breaks after a completed run: none during the first five completed lifetime runs, then only after at least five additional completed runs and at least five minutes since the previous ad, with no more than three shown in one session. An unloaded ad is skipped rather than shown late.</p>
 <p>KOŁO’s initial AdMob request configuration is intended to use a maximum ad-content rating of <strong>G</strong>. Advertising must not appear during active gameplay, at launch, over legal, age, consent, tracking or purchase interfaces, or in a way designed to cause accidental taps.</p>
 <h3>Age and consent controls</h3>
 <ul>
-<li>Before the age band is known: no AdMob, UMP, Firebase Analytics, ATT request or advertising identifier access.</li>
+<li>Before the age band is known: no AdMob, UMP, Firebase Analytics, Firebase Crashlytics, ATT request or advertising identifier access.</li>
 <li>Under 18: no ads, no advertising Analytics, no UMP flow and no cross-app tracking.</li>
 <li>18+: UMP may collect and store the privacy choices required for the current region; ads may be requested only when the current consent status permits them.</li>
 <li>On Apple devices, App Tracking Transparency is requested only if KOŁO intends to access IDFA or perform tracking as Apple defines it. Refusal does not block gameplay and must not be treated as consent.</li>
 <li>On a future Google Play release, Android-specific advertising-identifier and consent controls apply only if that release is implemented and distributed.</li>
 </ul>
-<p>Where UMP requires an entry point, KOŁO provides an in-app <strong>Privacy Options</strong> control so an eligible adult can revisit the available choices.</p>
+<p>Where UMP requires an entry point, KOŁO provides an in-app <strong>Ad Choices</strong> control so an eligible adult can revisit the available choices.</p>
 <h3>Information the providers may process</h3>
 <p>Depending on configuration and consent, Google Mobile Ads may process an IP address used to estimate general location, non-user-related crash logs, performance information, device or app identifiers, advertising data and interactions with the app or ads. IDFA may be available on Apple only after the required ATT permission.</p>
 <p>Firebase Analytics may process app-instance and device information, operating-system information, general location derived from an IP address, permitted app events, product interactions and diagnostics. KOŁO does not intentionally send Firebase an exact age, birthdate, name, email address, StoreKit transaction identifier, purchase token, exact score history or free-form support text. Analytics collection starts disabled and is never enabled for a protected under-18 user.</p>
-<p>KOŁO does not sell personal information. Personalised or cross-app behavioural advertising is not shown without the permissions and consent required by applicable law and the platform. Users can report inappropriate or age-inappropriate advertising through the in-app <strong>Report an Ad</strong> route or the support page.</p>
+<p>Firebase Crashlytics, provided by Google/Firebase, follows the identical default-off, adult-and-consent-gated policy as Firebase Analytics above: it remains off for every user under 18, for unknown age, and until the applicable consent is granted. When active, Crashlytics may process crash reports and stack traces; app version and build; device model and operating-system information; app/process and diagnostic state; the Crashlytics Installation UUID; the Firebase installation ID; and a small set of explicitly permitted coarse custom keys (for example whether Analytics is currently enabled, the current privacy-flow phase, and whether Remove Ads is owned — never free-form text) — to help identify and fix defects. KOŁO does not intentionally send Crashlytics your exact age or birthdate, name or email, a KOŁO account identifier (KOŁO has no user account), your exact gameplay score, a StoreKit transaction identifier or free-form user content.</p>
+<p>KOŁO does not sell personal information. Personalised or cross-app behavioural advertising is not shown without the permissions and consent required by applicable law and the platform. Users can report inappropriate or age-inappropriate advertising through <strong>Support</strong> in Settings or the support page.</p>
 </section><section id="support"><h2>6. Information You Provide to Support or an Ad Report</h2>
 <p>If you contact support or report an advertisement, we receive your email address, message and any screenshot, recording, device details, platform, approximate time, purchase information or other material you choose to send.</p>
 <p>An ad report may include why the ad was inappropriate or age-inappropriate and where it appeared. You are not required to provide an advertising identifier, and you should not tap an ad merely to obtain information for a report.</p>
@@ -382,7 +386,7 @@ main{min-height:68vh}
 <p>Depending on the platform, version and feature used, information may be processed by:</p>
 <ul>
 <li><strong>Apple</strong>, for App Store distribution, StoreKit purchases, restoration, refunds, device services, ATT status and platform security on Apple releases;</li>
-<li><strong>Google LLC</strong>, for AdMob advertising, UMP privacy choices and Firebase Analytics where those services are enabled;</li>
+<li><strong>Google LLC</strong>, for AdMob advertising, UMP privacy choices, Firebase Analytics and Firebase Crashlytics where those services are enabled;</li>
 <li><strong>Google Play</strong>, for future Android distribution, Play Billing, purchase acknowledgement, restoration, refunds and platform security if KOŁO is released there;</li>
 <li><strong>GitHub</strong>, for hosting and protecting these public pages;</li>
 <li><strong>our email provider</strong>, when you contact support or submit an ad report;</li>
@@ -395,6 +399,7 @@ main{min-height:68vh}
 <li><strong>Age information:</strong> the exact selected age is not retained; the derived band and source remain until changed or local data is removed.</li>
 <li><strong>Consent state:</strong> may remain locally or through UMP as needed to honour the choice until it is changed, reset or no longer required.</li>
 <li><strong>Firebase Analytics:</strong> where enabled for a consenting eligible adult, event data is retained according to the project’s configured retention controls and Google’s service terms. KOŁO uses data minimisation and reviews the setting before release.</li>
+<li><strong>Firebase Crashlytics:</strong> where enabled for a consenting eligible adult, crash and diagnostic data is retained according to Google’s Crashlytics service terms. KOŁO does not enable BigQuery export or any extended retention beyond Firebase’s own defaults.</li>
 <li><strong>Advertising and diagnostics:</strong> Google may retain information according to the applicable AdMob, fraud-prevention and privacy terms.</li>
 <li><strong>Local entitlement cache:</strong> remains only as needed to reflect Remove Ads and can be rebuilt from the applicable Platform Store.</li>
 <li><strong>Store transaction records:</strong> are controlled by Apple or Google under their own retention rules and may remain available so a valid non-consumable purchase can be verified or restored.</li>
@@ -405,7 +410,7 @@ main{min-height:68vh}
 <p>KOŁO has no user account to delete. We normally cannot access or restore local gameplay data remotely. Deleting KOŁO does not delete transaction, consent or advertising records controlled independently by Apple, Google or another provider.</p>
 </section><section id="rights"><h2>11. Your Privacy Rights</h2>
 <p>Depending on your location and applicable law, you may have rights of access, correction, deletion, restriction, objection and portability, and the right to withdraw consent where processing relies on consent.</p>
-<p>Eligible adults can revisit Google consent choices through <strong>Privacy Options</strong> when the entry point is required. On Apple devices, tracking permission can also be changed through iOS Settings. Withdrawing consent does not affect processing already carried out lawfully before withdrawal and may result in non-personalised advertising or no advertising, depending on the active configuration.</p>
+<p>Eligible adults can revisit Google consent choices through <strong>Ad Choices</strong> when the entry point is required. On Apple devices, tracking permission can also be changed through iOS Settings. Withdrawing consent does not affect processing already carried out lawfully before withdrawal and may result in non-personalised advertising or no advertising, depending on the active configuration.</p>
 <p>Send a request to <a href="mailto:hello@ostoya.games?subject=KO%C5%81O%20Privacy%20Request">hello@ostoya.games</a>. We may need enough information to verify the request and locate relevant support or transaction-related correspondence. You may also complain to the competent data-protection authority; in Poland, this is the President of the Personal Data Protection Office (UODO).</p>
 </section><section id="security"><h2>12. Security and International Processing</h2>
 <p>We apply data minimisation, HTTPS, local storage for ordinary game progress and reasonable technical and organisational safeguards. No storage or transmission method can be guaranteed completely secure.</p>
